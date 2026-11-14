@@ -13,3 +13,9 @@ flake8
 isort
 build
 setuptools
+
+# notebooks: open them with JupyterLab; nbformat/nbclient/ipykernel are only needed to rebuild/check them
+jupyterlab
+ipykernel
+nbformat
+nbclient
