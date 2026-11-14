@@ -427,5 +427,203 @@ counter["a"] += 1   # reads missing "a" as 0 via __missing__, then sets it to 1
 counter["a"] += 1
 print("AutoZeroDict counting without setdefault/defaultdict:", dict(counter))
 
+# 15. Changing a Dict While Iterating: RuntimeError
+# ------------------------------------
+# - Looping over a dict uses an iterator tied to the dict's internal hash
+#   table. Adding or removing a KEY can resize/rearrange that table, which
+#   would invalidate the iterator (it could skip or repeat keys). Python
+#   checks the dict's size on every step and raises RuntimeError instead of
+#   silently giving wrong results (compare with the silent list bug).
+# - Changing the VALUE of an existing key does not touch the table layout,
+#   so it is allowed.
+
+print("\n# 15. Changing a Dict While Iterating: RuntimeError")
+print("# ------------------------------------")
+
+scores = {"a": 1, "b": 2, "c": 3}
+try:
+    for k in scores:
+        if scores[k] == 2:
+            del scores[k]            # removing a key mid-loop
+except RuntimeError as e:
+    print("deleting a key  ->", type(e).__name__ + ":", e)
+
+scores = {"a": 1, "b": 2, "c": 3}
+try:
+    for k in scores:
+        scores[k + "_copy"] = scores[k]   # adding a key mid-loop
+except RuntimeError as e:
+    print("adding a key    ->", type(e).__name__ + ":", e)
+
+scores = {"a": 1, "b": 2, "c": 3}
+for k in scores:
+    scores[k] = scores[k] * 10       # same keys, new values: fine
+print("changing VALUES during iteration is OK:", scores)
+print("Rule of thumb: values may change, the SET of keys may not.")
+
+# 16. Safe Patterns for Removing/Adding Keys While Looping
+# ------------------------------------
+print("\n# 16. Safe Patterns for Removing/Adding Keys While Looping")
+print("# ------------------------------------")
+
+def fresh():
+    return {"a": 1, "b": 2, "c": 3, "d": 4}
+
+# (a) Loop over a snapshot of the keys
+d = fresh()
+for k in list(d):                    # list(d) is a separate list of the keys
+    if d[k] % 2 == 0:
+        del d[k]
+print("(a) for k in list(d)         :", d)
+
+# (b) Rebuild with a dict comprehension (usually cleanest)
+d = fresh()
+d = {k: v for k, v in d.items() if v % 2 != 0}
+print("(b) dict comprehension       :", d)
+
+# (c) Collect the keys to delete, then delete after the loop
+d = fresh()
+to_delete = [k for k, v in d.items() if v % 2 == 0]
+for k in to_delete:
+    del d[k]
+print("(c) collect keys, then delete:", d)
+
+# (d) Iterate over a copy of the whole dict
+d = fresh()
+for k, v in d.copy().items():
+    if v % 2 == 0:
+        d.pop(k)
+print("(d) loop over d.copy()       :", d)
+
+# (e) Adding keys safely: add to a separate dict, merge afterwards
+d = fresh()
+extra = {k.upper(): v for k, v in d.items()}
+d.update(extra)
+print("(e) build extras, then update:", d)
+
+# 17. Missing Keys: pop / del / get / [] / in
+# ------------------------------------
+print("\n# 17. Missing Keys: pop / del / get / [] / in")
+print("# ------------------------------------")
+
+d = {"x": 10, "y": 20}
+try:
+    d.pop("zzz")
+except KeyError as e:
+    print("d.pop('zzz')         -> KeyError:", e)
+print("d.pop('zzz', None)   ->", d.pop("zzz", None), "(a default means no error)")
+try:
+    del d["zzz"]
+except KeyError as e:
+    print("del d['zzz']         -> KeyError:", e, "(del has NO default form)")
+if "zzz" in d:                       # guard first, or use try/except
+    del d["zzz"]
+
+print("\nThree ways to read a key:")
+print("d['x']        ->", d["x"], "     raises KeyError if missing")
+print("d.get('q')    ->", d.get("q"), "   returns None (or a default) if missing")
+print("d.get('q', 0) ->", d.get("q", 0))
+print("'x' in d      ->", "x" in d, "   just asks 'is it a key?' - never raises")
+
+# Gotcha: get() cannot tell 'missing' from 'present with value None'
+d2 = {"k": None}
+print("\nGotcha: d2.get('k') is", d2.get("k"), "and d2.get('nope') is", d2.get("nope"), "- identical!")
+print("Use `in` (or a sentinel default) to tell them apart:", "k" in d2, "nope" in d2)
+
+# `in` checks KEYS only
+d3 = {"apple": 5}
+print("\n'apple' in d3          :", "apple" in d3)
+print("5 in d3                :", 5 in d3, "  (5 is a value, not a key)")
+print("5 in d3.values()       :", 5 in d3.values(), "  (works, but see cost below)")
+
+import timeit
+big = {i: i for i in range(100_000)}
+t_key = timeit.timeit(lambda: 99_999 in big, number=200)
+t_val = timeit.timeit(lambda: 99_999 in big.values(), number=200)
+print(f"key lookup (hash, O(1))      : {t_key:.5f}s for 200 checks")
+print(f"value lookup (scan, O(n))    : {t_val:.5f}s for 200 checks  <- far slower")
+print("Need to search by value often? Build a reverse dict {v: k} once.")
+
+# 18. dict.fromkeys() Shared Mutable Value Gotcha
+# ------------------------------------
+# - fromkeys(keys, value) uses the SAME value object for every key. Fine for
+#   immutables (0, None, ""), but with a list/dict every key points at one
+#   single shared object.
+
+print("\n# 18. dict.fromkeys() Shared Mutable Value Gotcha")
+print("# ------------------------------------")
+
+keys = ["a", "b", "c"]
+shared = dict.fromkeys(keys, [])
+shared["a"].append(1)
+print("after shared['a'].append(1):", shared, " <- every key changed!")
+print("same object for all keys?   :", shared["a"] is shared["b"] is shared["c"])
+
+fixed = {k: [] for k in keys}        # the comprehension runs [] once PER key -> separate lists
+fixed["a"].append(1)
+print("fix, comprehension          :", fixed)
+
+from collections import defaultdict
+dd = defaultdict(list)               # alternative: create the list on first access
+dd["a"].append(1)
+print("fix, defaultdict(list)      :", dict(dd))
+print("fromkeys is still great with immutable values:", dict.fromkeys(keys, 0))
+
+# 19. Why Dict Keys Must Be Hashable
+# ------------------------------------
+# - A dict finds a key by computing hash(key) to pick a slot. If the key
+#   could change after insertion its hash would change and the dict could no
+#   longer find it. So only objects with a stable hash (immutable ones) are
+#   allowed. Equal keys must have equal hashes.
+
+print("\n# 19. Why Dict Keys Must Be Hashable")
+print("# ------------------------------------")
+
+try:
+    bad = {[1, 2]: "list as key"}
+except TypeError as e:
+    print("list key      ->", type(e).__name__ + ":", e)
+
+print("tuple key     ->", {(1, 2): "ok"})
+print("frozenset key ->", {frozenset({1, 2}): "ok"})
+print("str/int/float/bool/None keys ->", {"s": 1, 2: 2, 3.5: 3, True: 4, None: 5})
+
+try:
+    {(1, [2]): "x"}
+except TypeError as e:
+    print("tuple CONTAINING a list ->", type(e).__name__ + ":", e, "(a tuple is hashable only if all its items are)")
+
+print("\nCustom classes:")
+
+class Plain:                         # default: hash/== are by identity (the object's id)
+    def __init__(self, n):
+        self.n = n
+
+print("Plain(1) == Plain(1)?", Plain(1) == Plain(1), "-> two separate keys:", len({Plain(1): "a", Plain(1): "b"}))
+
+class EqOnly:                        # defining __eq__ WITHOUT __hash__ disables hashing
+    def __init__(self, n):
+        self.n = n
+    def __eq__(self, other):
+        return isinstance(other, EqOnly) and self.n == other.n
+
+try:
+    {EqOnly(1): "a"}
+except TypeError as e:
+    print("EqOnly key    ->", type(e).__name__ + ":", e)
+
+class Good:                          # __eq__ and __hash__ agree -> equal objects are the same key
+    def __init__(self, n):
+        self.n = n
+    def __eq__(self, other):
+        return isinstance(other, Good) and self.n == other.n
+    def __hash__(self):
+        return hash(self.n)          # hash exactly what __eq__ compares
+
+gd = {Good(1): "a"}
+gd[Good(1)] = "b"                    # same key as before -> overwrites
+print("Good(1) twice ->", len(gd), "key; value:", gd[Good(1)])
+print("Rule: if a == b then hash(a) == hash(b); only hash fields that never change.")
+
 print("\n# End of Dictionary Explanation")
 

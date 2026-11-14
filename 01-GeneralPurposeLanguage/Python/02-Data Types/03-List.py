@@ -453,5 +453,157 @@ print(f"map() + lambda    : {map_time:.4f}s (1000 runs)")
 print("# Comprehensions avoid the overhead of a Python-level function call")
 print("# per element that lambda-based map() incurs.")
 
+# 14. Modifying a List While Iterating Over It (the Skipping Bug)
+# ------------------------------------
+# - A `for` loop over a list walks by INDEX: it keeps an internal position
+#   (0, 1, 2, ...) and reads lst[position] each step.
+# - If you remove an item, everything after it shifts one slot left, but the
+#   loop's position still moves forward by one - so the item that slid into
+#   the current slot is never looked at. No error is raised: silent bug.
+
+print("\n# 14. Modifying a List While Iterating Over It (the Skipping Bug)")
+print("# ------------------------------------")
+
+nums = [2, 4, 6, 1, 8]          # we want to remove ALL even numbers
+for x in nums:
+    print(f"  visiting {x}  list now {nums}")
+    if x % 2 == 0:
+        nums.remove(x)
+print("Expected: [1]   Actual:", nums, " <- 4 and 8 survived (skipped)")
+
+# Step by step: idx0 -> 2 (removed, list=[4,6,1,8]); idx1 -> 6 (4 slid into
+# idx0 and was skipped; 6 removed -> [4,1,8]); idx2 -> 8 (1 skipped too; 8
+# removed -> [4,1]); idx3 is out of range, loop ends. 4 never got checked.
+
+# 15. Safe Patterns (pick the one that fits)
+# ------------------------------------
+print("\n# 15. Safe Patterns (pick the one that fits)")
+print("# ------------------------------------")
+
+def fresh():
+    return [2, 4, 6, 1, 8, 3]
+
+# (a) Iterate over a COPY, mutate the original
+lst = fresh()
+for x in lst[:]:                 # lst[:] is a shallow copy, so removals don't affect the walk
+    if x % 2 == 0:
+        lst.remove(x)
+print("(a) loop over copy lst[:]        :", lst)
+
+# (b) Build a NEW list with a comprehension (usually the best choice)
+lst = fresh()
+lst = [x for x in lst if x % 2 != 0]
+print("(b) comprehension (keep the odds):", lst)
+
+# (b2) ...but if other code holds a reference to the same list, change it in place
+lst = fresh()
+alias = lst
+lst[:] = [x for x in lst if x % 2 != 0]       # slice assignment keeps the SAME object
+print("(b2) slice assignment, alias sees:", alias)
+
+# (c) Iterate in reverse - removing at index i only shifts items AFTER i, which
+#     a reversed walk has already visited
+lst = fresh()
+for i in range(len(lst) - 1, -1, -1):
+    if lst[i] % 2 == 0:
+        del lst[i]
+print("(c) reverse index loop           :", lst)
+
+# (d) filter() - returns a lazy iterator, wrap in list()
+lst = fresh()
+print("(d) list(filter(...))            :", list(filter(lambda v: v % 2, lst)))
+
+# (e) Collect indexes first, delete afterwards (from the highest index down!)
+lst = fresh()
+to_delete = [i for i, v in enumerate(lst) if v % 2 == 0]
+for i in reversed(to_delete):
+    del lst[i]
+print("(e) collect indexes, then delete :", lst)
+print("Gotcha for (e): deleting in ASCENDING order shifts later indexes and kills the wrong items.")
+
+# 16. Inserting While Iterating (Infinite-Loop Risk)
+# ------------------------------------
+# - Insert/append ahead of the loop position and the loop keeps finding new
+#   items forever, because the list grows as fast as the loop eats it.
+# - Demonstrated here with a guard so it stops after a few steps.
+
+print("\n# 16. Inserting While Iterating (Infinite-Loop Risk)")
+print("# ------------------------------------")
+
+items = [1, 2, 3]
+steps = 0
+for x in items:
+    steps += 1
+    items.append(x + 10)         # grows by one every step -> never exhausted
+    if steps == 6:               # our safety guard; without it this never ends
+        print("  guard hit! list kept growing:", items)
+        break
+
+# insert(0, ...) shifts the SAME item into the next slot, so it is visited twice
+items = ["a", "b"]
+seen = []
+for x in items:
+    seen.append(x)
+    if len(items) < 4:           # guard again
+        items.insert(0, "new")
+print("insert(0, ..) while looping, items seen:", seen, " ('a' is revisited each time it is shifted right)")
+
+safe = [y for x in [1, 2, 3] for y in (x, x + 10)]   # build the bigger result in a NEW list instead
+print("Safe: build a new list instead     :", safe)
+
+# 17. list.sort() Returns None  vs  sorted()
+# ------------------------------------
+# - Python convention: methods that change an object IN PLACE return None so
+#   you can't confuse them with methods that return a new object.
+
+print("\n# 17. list.sort() Returns None vs sorted()")
+print("# ------------------------------------")
+
+data = [3, 1, 2]
+result = data.sort()
+print("x = data.sort()  -> x is", result, "| data is now", data)   # sorted in place, result is None
+
+data = [3, 1, 2]
+result = sorted(data)
+print("x = sorted(data) -> x is", result, "| data still", data)
+
+try:
+    data = [3, 1, 2]
+    print("data.sort()[0] ->", data.sort()[0])
+except TypeError as e:
+    print("chaining on the None ->", type(e).__name__ + ":", e)
+
+print("Same family: reverse(), append(), extend(), insert(), remove() all return None.")
+print("sorted() accepts ANY iterable (tuple, set, dict, str) and always returns a list:", sorted("cab"))
+
+# Quick recap of options (full detail in section 12)
+words = ["bb", "a", "ccc", "dd"]
+print("key + reverse:", sorted(words, key=len, reverse=True), "| stable: 'bb' stays before 'dd' (equal length)")
+
+# 18. Sorting Mixed Types Raises TypeError
+# ------------------------------------
+# - Sorting needs `<` between items. int < str is undefined in Python 3
+#   (Python 2 allowed it - a source of old bugs).
+
+print("\n# 18. Sorting Mixed Types Raises TypeError")
+print("# ------------------------------------")
+
+mixed = [3, "apple", 1, "banana"]
+try:
+    mixed.sort()
+except TypeError as e:
+    print("sort() on mixed ->", type(e).__name__ + ":", e)
+print("list after the failed sort (unchanged):", mixed)
+
+print("Fix 1 - sort by a common key:", sorted(mixed, key=str))
+print("Fix 2 - split by type first :", sorted(v for v in mixed if isinstance(v, int)),
+      sorted(v for v in mixed if isinstance(v, str)))
+print("Also: None breaks sorting -", end=" ")
+try:
+    sorted([2, None, 1])
+except TypeError as e:
+    print(e)
+print("Fix with a key that ranks None last:", sorted([2, None, 1], key=lambda v: (v is None, v or 0)))
+
 print("\n# End of List Explanation")
 
