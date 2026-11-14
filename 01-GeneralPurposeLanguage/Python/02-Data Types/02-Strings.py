@@ -437,5 +437,252 @@ pattern = r"\d+"   # raw string - \d means 'digit' to re, not an escape sequence
 match = re.search(pattern, "Room 42")
 print("\nre.search(r'\\d+', 'Room 42'):", match.group() if match else None)
 
+# 14. Alignment & Padding Methods: ljust / rjust / center / zfill
+# ------------------------------------
+# - Padding makes text line up in columns. WHY: terminal output, reports and
+#   fixed-width files only look right when every value takes the same width.
+# - ljust(w)/rjust(w)/center(w) pad to width w using a fill character (space
+#   by default). They NEVER cut text - if the string is already >= w it is
+#   returned unchanged.
+# - zfill(w) pads with '0' on the left and is sign-aware.
+
+print("\n# 14. Alignment & Padding Methods: ljust / rjust / center / zfill")
+print("# ------------------------------------")
+
+s = "py"
+print(f"ljust(8)       : '{s.ljust(8)}'")
+print(f"rjust(8)       : '{s.rjust(8)}'")
+print(f"center(8)      : '{s.center(8)}'")
+print(f"ljust(8, '.')  : '{s.ljust(8, '.')}'     (second argument = fillchar)")
+print(f"rjust(8, '-')  : '{s.rjust(8, '-')}'")
+print(f"center(9, '*') : '{s.center(9, '*')}'")
+print(f"center(8,'*') with an odd gap: '{'abc'.center(8, '*')}'  (extra char goes to one side)")
+
+print("\nzfill - zero pad on the left, handles the sign for you:")
+print("'42'.zfill(5)   :", "42".zfill(5))
+print("'-42'.zfill(5)  :", "-42".zfill(5), " (zeros go AFTER the minus)")
+print("'+7'.zfill(4)   :", "+7".zfill(4))
+print("'-42'.rjust(5, '0'):", "-42".rjust(5, "0"), " (rjust is NOT sign-aware - gotcha!)")
+
+# Gotcha: padding never truncates, and fillchar must be exactly ONE character
+print("\n'too long'.ljust(3) :", repr("too long".ljust(3)), "(unchanged, never truncated)")
+try:
+    "x".ljust(5, "ab")
+except TypeError as e:
+    print("ljust with 2-char fillchar ->", type(e).__name__ + ":", e)
+
+# 15. The Same Alignment via the Format Spec
+# ------------------------------------
+# - Spec shape: {value:[fill][align][width]} with align < (left) > (right)
+#   ^ (center). Default align: text -> left, numbers -> right.
+# - '0' before width means "zero pad, sign-aware" (like zfill, but for ints).
+
+print("\n# 15. The Same Alignment via the Format Spec")
+print("# ------------------------------------")
+
+print(f"'{{:<10}}'   : '{'py':<10}'")
+print(f"'{{:>10}}'   : '{'py':>10}'")
+print(f"'{{:^10}}'   : '{'py':^10}'")
+print(f"'{{:*^10}}'  : '{'py':*^10}'   (fill char BEFORE the align symbol)")
+print(f"'{{:-<10}}'  : '{'py':-<10}'")
+print(f"'{{:010d}}'  : '{42:010d}'")
+print(f"'{{:010d}}'  : '{-42:010d}'  (sign handled)")
+print(f"'{{:=+8d}}'  : '{42:=+8d}'  ('=' puts padding between sign and digits)")
+print("Defaults -> text left-aligned:", f"'{'ab':6}'", " number right-aligned:", f"'{12:6}'")
+
+# 16. Truncating Long Strings (and Combining Truncate + Pad)
+# ------------------------------------
+# - Padding makes short text longer; to make long text SHORTER you must cut it.
+# - Slicing s[:n] cuts to n chars. In a format spec, '.N' on a STRING means
+#   "max N characters" (precision) - on floats it means decimals.
+# - Truncate + pad together gives strict fixed-width columns.
+
+print("\n# 16. Truncating Long Strings (and Combining Truncate + Pad)")
+print("# ------------------------------------")
+
+title = "Introduction to Python Programming"
+print("title[:12]        :", title[:12])
+print(f"'{{:.12}}'        :", f"{title:.12}")
+
+def shorten(text, n):
+    """Cut text to at most n chars; mark the cut with an ellipsis (3 dots = '...')."""
+    if len(text) <= n:
+        return text
+    return text[: max(n - 3, 0)] + "..."
+
+print("shorten(title, 15):", shorten(title, 15))
+print("shorten('short', 15):", shorten("short", 15))
+
+print("\nTruncate + pad in ONE spec - {:<10.5} = left-align, width 10, max 5 chars:")
+print(f"'{'abcdefghij':<10.5}'")
+print(f"'{'hi':<10.5}'   (short text is only padded)")
+
+w, p = 12, 6   # nested width fields: the {w} and {p} are replaced FIRST
+print(f"nested fields, width={w} precision={p}: '{title:<{w}.{p}}'")
+print(f"nested + ellipsis helper               : '{shorten(title, w):<{w}}'")
+
+# 17. Number Formatting Codes
+# ------------------------------------
+# - Spec for numbers: [sign][#][0][width][, or _][.precision][type]
+# - Types: f fixed, e scientific, % percent, b/o/x/X binary/octal/hex.
+
+print("\n# 17. Number Formatting Codes")
+print("# ------------------------------------")
+
+big = 1234567.891
+print(f"',' thousands      : {big:,}")
+print(f"'_' thousands      : {1234567:_}      (underscore style, also valid Python literal)")
+print(f"'_' on binary (groups of 4): {255:_b}")
+print(f".2f                : {big:.2f}")
+print(f",.2f               : {big:,.2f}")
+print(f".3e (scientific)   : {big:.3e}")
+print(f".1% (percent)      : {0.256:.1%}   (multiplies by 100 and adds %)")
+
+n = 255
+print(f"\nb / o / x / X      : {n:b}  {n:o}  {n:x}  {n:X}")
+print(f"with # prefix      : {n:#b}  {n:#o}  {n:#x}  {n:#X}")
+print(f"padded binary      : {5:08b}   (8 bits, zero-filled)")
+print(f"padded #hex        : {n:#06x}   (width counts the 0x prefix too)")
+
+print(f"\nsign '+'           : {5:+d} {-5:+d}")
+print(f"sign ' ' (space)   : '{5: d}' '{-5: d}'   (space keeps columns aligned with negatives)")
+print(f"sign '-' (default) : {5:-d} {-5:-d}")
+
+# Gotcha: rounding is on the binary float, so some halves round 'wrong'
+print(f"\nGotcha: {0.125:.2f} (exact half -> banker's rounding),  {2.675:.2f} (2.675 is really 2.67499999...)")
+
+# 18. Dynamic Widths, the = Debug Specifier, and !r / !s / !a
+# ------------------------------------
+# - Any part of the spec can itself be a {field}, so width/precision can be
+#   variables.
+# - f"{x=}" (3.8+) prints the expression text AND its value - perfect for
+#   quick debugging; it uses repr() by default.
+# - Conversions: !s -> str(), !r -> repr(), !a -> ascii() (escapes non-ASCII).
+
+print("\n# 18. Dynamic Widths, the = Debug Specifier, and !r / !s / !a")
+print("# ------------------------------------")
+
+for width in (6, 10):
+    print(f"width={width:<2} -> '{'ok':^{width}}'")
+
+value, decimals = 3.14159265, 3
+print(f"dynamic precision: {value:.{decimals}f}   {value:{10}.{decimals}f}")
+
+x = 7
+name = "Ada"
+print(f"\n{x=}")
+print(f"{name=}")
+print(f"{x * 2 + 1=}")
+print(f"{x * 2 = }   <- spaces around '=' are kept, so you can style it")
+print(f"{x=:05d}   <- '=' can be combined with a format spec")
+print(f"{name=!s}   {name=!r}")
+
+text = "café\n"
+print(f"\n!s : {text!s}", end="")
+print(f"!r : {text!r}      (shows quotes + escapes; best for debugging)")
+print(f"!a : {text!a}     (non-ASCII becomes \\xe9)")
+print("Why !r matters - the string '5' and the int 5 print the same, repr tells them apart:", f"{'5'} {5}  ->  {'5'!r} {5!r}")
+
+# 19. Old-style %, str.format() and f-strings
+# ------------------------------------
+# - You will meet all three in real code, so read all three.
+# - % style: '%s' any object via str, '%d' int, '%.2f' float, '%05d' zero pad,
+#   '%(name)s' pulls from a dict. Operands go in a tuple (a single non-tuple is OK).
+
+print("\n# 19. Old-style %, str.format() and f-strings")
+print("# ------------------------------------")
+
+user, age, price = "Asha", 31, 49.5
+print("%s is %d years old"            % (user, age))
+print("price: %.2f | id: %05d"       % (price, 42))
+print("%(n)s owes %(amt).2f"         % {"n": user, "amt": price})
+print("percent sign needs doubling: %d%%" % 90)
+print("{} is {} years old".format(user, age))
+print("{0} {1} {0}  (positional, reusable)".format("a", "b"))
+print("{n} owes {amt:.2f}  (named)".format(n=user, amt=price))
+print(f"{user} is {age} years old   (f-string)")
+
+# Gotcha with %: a tuple argument must be wrapped in another tuple
+point = (3, 4)
+try:
+    print("point = %s" % point)
+except TypeError as e:
+    print("'%s' % tuple ->", type(e).__name__ + ":", e)
+print("fix: '%s' % (point,) ->", "point = %s" % (point,))
+
+print("""
+Which to use?
+- f-strings  : default for new code - shortest, fastest, expressions inline.
+- .format()  : when the template is stored separately / reused / built at
+               runtime (an f-string is evaluated immediately, a template is not).
+- % style    : know it to read old code and logging ('logging.info("x=%s", x)'
+               defers formatting until needed). Avoid in new code.""")
+
+# 20. Printing an Aligned Table from a List of Dicts
+# ------------------------------------
+# - Compute each column width from the data (max of header and values), then
+#   use nested width fields. No hard-coded widths -> never breaks on new data.
+
+print("\n# 20. Printing an Aligned Table from a List of Dicts")
+print("# ------------------------------------")
+
+rows = [
+    {"name": "Apple",        "qty": 3,   "price": 1.5},
+    {"name": "Watermelon",   "qty": 12,  "price": 120.25},
+    {"name": "Fig",          "qty": 100, "price": 0.75},
+]
+cols = list(rows[0])
+widths = {c: max(len(c), *(len(str(r[c])) for r in rows)) for c in cols}
+
+header = "  ".join(f"{c.title():<{widths[c]}}" if c == "name" else f"{c.title():>{widths[c]}}" for c in cols)
+print(header)
+print("  ".join("-" * widths[c] for c in cols))
+for r in rows:
+    print(f"{r['name']:<{widths['name']}}  {r['qty']:>{widths['qty']}}  {r['price']:>{widths['price']}.2f}")
+print("Text is left-aligned, numbers right-aligned - the usual table convention.")
+
+# 21. str.expandtabs()
+# ------------------------------------
+# - A tab '\t' jumps to the next tab stop (multiples of 8 by default), so the
+#   gap it makes depends on where it appears. expandtabs(n) replaces each tab
+#   with spaces so the text is predictable (tab stops every n columns).
+
+print("\n# 21. str.expandtabs()")
+print("# ------------------------------------")
+
+line = "a\tbb\tccc\td"
+print("repr  :", repr(line))
+print("tabs=8:", repr(line.expandtabs()))
+print("tabs=4:", repr(line.expandtabs(4)))
+print("tabs=4 printed:\n" + line.expandtabs(4))
+print("Note: 'a' + tab and 'ccc' + tab fill DIFFERENT numbers of spaces - they align to a stop.")
+
+# 22. f-string Quoting Rules (Before vs After 3.12) and Brace Escaping
+# ------------------------------------
+# - Before 3.12 you could NOT reuse the same quote type inside an f-string
+#   replacement field, and could not put a backslash there. 3.12 (PEP 701)
+#   removed those limits.
+# - To print a literal { or } double it: {{ and }}.
+
+print("\n# 22. f-string Quoting Rules (Before vs After 3.12) and Brace Escaping")
+print("# ------------------------------------")
+
+import sys
+
+d = {"k": "v"}
+print("Works on every version - use a DIFFERENT quote inside:", f"{d['k']}")
+if sys.version_info >= (3, 12):
+    # Compiled from a string so older interpreters don't hit a SyntaxError on import
+    code = 'f"{d["k"]}  <- same quotes reused inside (3.12+ only)"'
+    print(eval(code))
+    code2 = r"""f"{'-'.join(['a', 'b'])} and {'\n'.join(['l1', 'l2'])!r}  <- backslash inside the braces (3.12+ only)" """
+    print(eval(code2))
+else:
+    print("Skipped: same-quote reuse and backslashes inside {} need Python 3.12+ (SyntaxError before).")
+
+print(f"{{literal braces}} and a value in them: {{{x}}}")
+print("same with .format():", "{{{}}}".format(x))
+print("Gotcha: '%' formatting has no brace problem; .format() and f-strings DO, so double them.")
+
 print("\n# End of String Explanation")
 

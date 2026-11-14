@@ -1,0 +1,21 @@
+# Only the NumPy and Pandas folders need third-party packages.
+# Everything else in this Python track uses the standard library only.
+numpy>=1.26
+pandas>=2.2
+# optional: lets 08-Pandas/09-Input-Output.py also demo Excel read/write
+openpyxl
+
+# dev tools demoed in 09-Tooling-And-Quality (files skip a tool if it is missing)
+pytest
+mypy
+black
+flake8
+isort
+build
+setuptools
+
+# notebooks: open them with JupyterLab; nbformat/nbclient/ipykernel are only needed to rebuild/check them
+jupyterlab
+ipykernel
+nbformat
+nbclient
