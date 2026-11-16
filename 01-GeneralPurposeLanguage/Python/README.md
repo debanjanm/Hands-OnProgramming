@@ -13,7 +13,7 @@ python3 "01-Python Fundamentals/02-Fundamentals.py"
 - **Python 3.10+** (tested on 3.12). A few files use newer features and print a
   skip message on older versions: `match-case` needs 3.10, `except*` and
   `StrEnum` need 3.11.
-- Only the NumPy and Pandas folders need third-party packages, and
+- Only the NumPy, Pandas and Visualization folders need third-party packages, and
   `09-Tooling-And-Quality` demos dev tools (pytest, mypy, black, flake8, isort,
   build). Install with `pip install -r requirements.txt`; each file skips a
   tool that is missing instead of failing.
@@ -69,6 +69,7 @@ must stay scripts, so their notebooks *run* and *import* the `.py` instead.
 
 - [07-NumPy](07-NumPy/README.md)
 - [08-Pandas](08-Pandas/README.md)
+- [10-Visualization](10-Visualization/README.md)
 
 ### Stage 5 — Professional practice
 
@@ -181,6 +182,9 @@ Tick items as you finish them (edit this file).
 - [ ] [08-Performance-And-Vectorization](07-NumPy/08-Performance-And-Vectorization.py) · [notes](07-NumPy/08-Performance-And-Vectorization.md) · [notebook](07-NumPy/08-Performance-And-Vectorization.ipynb)
 - [ ] [09-File-IO](07-NumPy/09-File-IO.py) · [notes](07-NumPy/09-File-IO.md) · [notebook](07-NumPy/09-File-IO.ipynb)
 - [ ] [10-Advanced-NumPy](07-NumPy/10-Advanced-NumPy.py) · [notes](07-NumPy/10-Advanced-NumPy.md) · [notebook](07-NumPy/10-Advanced-NumPy.ipynb)
+- [ ] [11-Strides-And-Memory-Layout](07-NumPy/11-Strides-And-Memory-Layout.py) · [notes](07-NumPy/11-Strides-And-Memory-Layout.md) · [notebook](07-NumPy/11-Strides-And-Memory-Layout.ipynb)
+- [ ] [12-Advanced-Indexing-Ufuncs-And-Sorting](07-NumPy/12-Advanced-Indexing-Ufuncs-And-Sorting.py) · [notes](07-NumPy/12-Advanced-Indexing-Ufuncs-And-Sorting.md) · [notebook](07-NumPy/12-Advanced-Indexing-Ufuncs-And-Sorting.ipynb)
+- [ ] [13-NumPy-Recipes-And-Real-Patterns](07-NumPy/13-NumPy-Recipes-And-Real-Patterns.py) · [notes](07-NumPy/13-NumPy-Recipes-And-Real-Patterns.md) · [notebook](07-NumPy/13-NumPy-Recipes-And-Real-Patterns.ipynb)
 
 **08-Pandas**
 
@@ -194,6 +198,11 @@ Tick items as you finish them (edit this file).
 - [ ] [08-Time-Series](08-Pandas/08-Time-Series.py) · [notes](08-Pandas/08-Time-Series.md) · [notebook](08-Pandas/08-Time-Series.ipynb)
 - [ ] [09-Input-Output](08-Pandas/09-Input-Output.py) · [notes](08-Pandas/09-Input-Output.md) · [notebook](08-Pandas/09-Input-Output.ipynb)
 - [ ] [10-Performance-And-Best-Practices](08-Pandas/10-Performance-And-Best-Practices.py) · [notes](08-Pandas/10-Performance-And-Best-Practices.md) · [notebook](08-Pandas/10-Performance-And-Best-Practices.ipynb)
+- [ ] [11-MultiIndex-And-Advanced-Indexing](08-Pandas/11-MultiIndex-And-Advanced-Indexing.py) · [notes](08-Pandas/11-MultiIndex-And-Advanced-Indexing.md) · [notebook](08-Pandas/11-MultiIndex-And-Advanced-Indexing.ipynb)
+- [ ] [12-Dtypes-Categorical-And-Nullable](08-Pandas/12-Dtypes-Categorical-And-Nullable.py) · [notes](08-Pandas/12-Dtypes-Categorical-And-Nullable.md) · [notebook](08-Pandas/12-Dtypes-Categorical-And-Nullable.ipynb)
+- [ ] [13-Advanced-GroupBy-Window-And-Method-Chaining](08-Pandas/13-Advanced-GroupBy-Window-And-Method-Chaining.py) · [notes](08-Pandas/13-Advanced-GroupBy-Window-And-Method-Chaining.md) · [notebook](08-Pandas/13-Advanced-GroupBy-Window-And-Method-Chaining.ipynb)
+- [ ] [14-Text-And-Datetime-Deep-Dive](08-Pandas/14-Text-And-Datetime-Deep-Dive.py) · [notes](08-Pandas/14-Text-And-Datetime-Deep-Dive.md) · [notebook](08-Pandas/14-Text-And-Datetime-Deep-Dive.ipynb)
+- [ ] [15-End-To-End-Data-Analysis](08-Pandas/15-End-To-End-Data-Analysis.py) · [notes](08-Pandas/15-End-To-End-Data-Analysis.md) · [notebook](08-Pandas/15-End-To-End-Data-Analysis.ipynb)
 
 **09-Tooling-And-Quality**
 
@@ -205,9 +214,15 @@ Tick items as you finish them (edit this file).
 - [ ] [06-Documentation-And-Doctest](09-Tooling-And-Quality/06-Documentation-And-Doctest.py) · [notes](09-Tooling-And-Quality/06-Documentation-And-Doctest.md) · [notebook](09-Tooling-And-Quality/06-Documentation-And-Doctest.ipynb)
 - [ ] [07-Security-Basics](09-Tooling-And-Quality/07-Security-Basics.py) · [notes](09-Tooling-And-Quality/07-Security-Basics.md) · [notebook](09-Tooling-And-Quality/07-Security-Basics.ipynb)
 
+**10-Visualization**
+
+- [ ] [01-Matplotlib-Basics](10-Visualization/01-Matplotlib-Basics.py) · [notes](10-Visualization/01-Matplotlib-Basics.md) · [notebook](10-Visualization/01-Matplotlib-Basics.ipynb)
+- [ ] [02-Matplotlib-Advanced](10-Visualization/02-Matplotlib-Advanced.py) · [notes](10-Visualization/02-Matplotlib-Advanced.md) · [notebook](10-Visualization/02-Matplotlib-Advanced.ipynb)
+- [ ] [03-Pandas-Plotting-And-Seaborn](10-Visualization/03-Pandas-Plotting-And-Seaborn.py) · [notes](10-Visualization/03-Pandas-Plotting-And-Seaborn.md) · [notebook](10-Visualization/03-Pandas-Plotting-And-Seaborn.ipynb)
+- [ ] [04-Visualization-Best-Practices](10-Visualization/04-Visualization-Best-Practices.py) · [notes](10-Visualization/04-Visualization-Best-Practices.md) · [notebook](10-Visualization/04-Visualization-Best-Practices.ipynb)
+
 ## Not covered yet (planned)
 
-- NumPy/Pandas deepening and plotting (matplotlib).
 - Applied Python: HTTP/web APIs, scraping, databases, automation.
 - Practice exercises with solutions and capstone projects.
 
