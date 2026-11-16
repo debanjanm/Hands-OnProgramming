@@ -75,6 +75,7 @@ must stay scripts, so their notebooks *run* and *import* the `.py` instead.
 
 - [09-Tooling-And-Quality](09-Tooling-And-Quality/README.md)
 - [11-Applied-Python](11-Applied-Python/README.md)
+- [12-Practice-And-Projects](12-Practice-And-Projects/README.md)
 
 ## Progress checklist
 
@@ -234,7 +235,4 @@ Tick items as you finish them (edit this file).
 - [ ] [08-CLI-Apps-And-Configuration](11-Applied-Python/08-CLI-Apps-And-Configuration.py) · [notes](11-Applied-Python/08-CLI-Apps-And-Configuration.md) · [notebook](11-Applied-Python/08-CLI-Apps-And-Configuration.ipynb)
 - [ ] [09-Automation-And-Scripting](11-Applied-Python/09-Automation-And-Scripting.py) · [notes](11-Applied-Python/09-Automation-And-Scripting.md) · [notebook](11-Applied-Python/09-Automation-And-Scripting.ipynb)
 
-## Not covered yet (planned)
-
-- Practice exercises with solutions and capstone projects.
-
+**12-Practice-And-Projects** - exercises with tests and four capstone projects: [README](12-Practice-And-Projects/README.md)
