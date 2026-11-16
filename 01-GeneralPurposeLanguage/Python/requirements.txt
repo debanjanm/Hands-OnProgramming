@@ -5,6 +5,21 @@ pandas>=2.2
 matplotlib>=3.8
 # optional: 10-Visualization/03 skips its seaborn sections if missing
 seaborn
+# 11-Applied-Python (all optional: each file skips what is missing)
+requests
+httpx
+aiohttp
+flask
+fastapi
+beautifulsoup4
+lxml
+sqlalchemy
+pydantic
+pydantic-settings
+pyyaml
+click
+typer
+
 # optional: lets 08-Pandas/09-Input-Output.py also demo Excel read/write
 openpyxl
 

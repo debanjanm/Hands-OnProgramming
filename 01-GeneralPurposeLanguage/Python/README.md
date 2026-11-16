@@ -74,6 +74,7 @@ must stay scripts, so their notebooks *run* and *import* the `.py` instead.
 ### Stage 5 — Professional practice
 
 - [09-Tooling-And-Quality](09-Tooling-And-Quality/README.md)
+- [11-Applied-Python](11-Applied-Python/README.md)
 
 ## Progress checklist
 
@@ -221,8 +222,19 @@ Tick items as you finish them (edit this file).
 - [ ] [03-Pandas-Plotting-And-Seaborn](10-Visualization/03-Pandas-Plotting-And-Seaborn.py) · [notes](10-Visualization/03-Pandas-Plotting-And-Seaborn.md) · [notebook](10-Visualization/03-Pandas-Plotting-And-Seaborn.ipynb)
 - [ ] [04-Visualization-Best-Practices](10-Visualization/04-Visualization-Best-Practices.py) · [notes](10-Visualization/04-Visualization-Best-Practices.md) · [notebook](10-Visualization/04-Visualization-Best-Practices.ipynb)
 
+**11-Applied-Python**
+
+- [ ] [01-HTTP-Clients-And-Local-Servers](11-Applied-Python/01-HTTP-Clients-And-Local-Servers.py) · [notes](11-Applied-Python/01-HTTP-Clients-And-Local-Servers.md) · [notebook](11-Applied-Python/01-HTTP-Clients-And-Local-Servers.ipynb)
+- [ ] [02-Building-REST-APIs](11-Applied-Python/02-Building-REST-APIs.py) · [notes](11-Applied-Python/02-Building-REST-APIs.md) · [notebook](11-Applied-Python/02-Building-REST-APIs.ipynb)
+- [ ] [03-Async-HTTP-And-Concurrency](11-Applied-Python/03-Async-HTTP-And-Concurrency.py) · [notes](11-Applied-Python/03-Async-HTTP-And-Concurrency.md) · [notebook](11-Applied-Python/03-Async-HTTP-And-Concurrency.ipynb)
+- [ ] [04-Web-Scraping-On-Local-HTML](11-Applied-Python/04-Web-Scraping-On-Local-HTML.py) · [notes](11-Applied-Python/04-Web-Scraping-On-Local-HTML.md) · [notebook](11-Applied-Python/04-Web-Scraping-On-Local-HTML.ipynb)
+- [ ] [05-SQLite-With-Python](11-Applied-Python/05-SQLite-With-Python.py) · [notes](11-Applied-Python/05-SQLite-With-Python.md) · [notebook](11-Applied-Python/05-SQLite-With-Python.ipynb)
+- [ ] [06-SQLAlchemy-Core-And-ORM](11-Applied-Python/06-SQLAlchemy-Core-And-ORM.py) · [notes](11-Applied-Python/06-SQLAlchemy-Core-And-ORM.md) · [notebook](11-Applied-Python/06-SQLAlchemy-Core-And-ORM.ipynb)
+- [ ] [07-Data-Validation-And-Serialization](11-Applied-Python/07-Data-Validation-And-Serialization.py) · [notes](11-Applied-Python/07-Data-Validation-And-Serialization.md) · [notebook](11-Applied-Python/07-Data-Validation-And-Serialization.ipynb)
+- [ ] [08-CLI-Apps-And-Configuration](11-Applied-Python/08-CLI-Apps-And-Configuration.py) · [notes](11-Applied-Python/08-CLI-Apps-And-Configuration.md) · [notebook](11-Applied-Python/08-CLI-Apps-And-Configuration.ipynb)
+- [ ] [09-Automation-And-Scripting](11-Applied-Python/09-Automation-And-Scripting.py) · [notes](11-Applied-Python/09-Automation-And-Scripting.md) · [notebook](11-Applied-Python/09-Automation-And-Scripting.ipynb)
+
 ## Not covered yet (planned)
 
-- Applied Python: HTTP/web APIs, scraping, databases, automation.
 - Practice exercises with solutions and capstone projects.
 
