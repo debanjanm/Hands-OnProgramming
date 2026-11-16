@@ -118,6 +118,15 @@ Tick items as you finish them (edit this file).
 - [ ] [06-Dataclasses-And-Operator-Overloading](04-OOPs/06-Dataclasses-And-Operator-Overloading.py) · [notes](04-OOPs/06-Dataclasses-And-Operator-Overloading.md) · [notebook](04-OOPs/06-Dataclasses-And-Operator-Overloading.ipynb)
 - [ ] [07-Custom-Containers-And-ABCs](04-OOPs/07-Custom-Containers-And-ABCs.py) · [notes](04-OOPs/07-Custom-Containers-And-ABCs.md) · [notebook](04-OOPs/07-Custom-Containers-And-ABCs.ipynb)
 - [ ] [08-SOLID-Principles](04-OOPs/08-SOLID-Principles.py) · [notes](04-OOPs/08-SOLID-Principles.md) · [notebook](04-OOPs/08-SOLID-Principles.ipynb)
+- [ ] [09-Descriptors-And-Properties](04-OOPs/09-Descriptors-And-Properties.py) · [notes](04-OOPs/09-Descriptors-And-Properties.md) · [notebook](04-OOPs/09-Descriptors-And-Properties.ipynb)
+- [ ] [10-Attribute-Access-Hooks](04-OOPs/10-Attribute-Access-Hooks.py) · [notes](04-OOPs/10-Attribute-Access-Hooks.md) · [notebook](04-OOPs/10-Attribute-Access-Hooks.ipynb)
+- [ ] [11-Metaclasses-And-Class-Creation](04-OOPs/11-Metaclasses-And-Class-Creation.py) · [notes](04-OOPs/11-Metaclasses-And-Class-Creation.md) · [notebook](04-OOPs/11-Metaclasses-And-Class-Creation.ipynb)
+- [ ] [12-Object-Lifecycle-Copy-And-Serialization](04-OOPs/12-Object-Lifecycle-Copy-And-Serialization.py) · [notes](04-OOPs/12-Object-Lifecycle-Copy-And-Serialization.md) · [notebook](04-OOPs/12-Object-Lifecycle-Copy-And-Serialization.ipynb)
+- [ ] [13-Composition-Vs-Inheritance](04-OOPs/13-Composition-Vs-Inheritance.py) · [notes](04-OOPs/13-Composition-Vs-Inheritance.md) · [notebook](04-OOPs/13-Composition-Vs-Inheritance.ipynb)
+- [ ] [14-Creational-Design-Patterns](04-OOPs/14-Creational-Design-Patterns.py) · [notes](04-OOPs/14-Creational-Design-Patterns.md) · [notebook](04-OOPs/14-Creational-Design-Patterns.ipynb)
+- [ ] [15-Structural-Design-Patterns](04-OOPs/15-Structural-Design-Patterns.py) · [notes](04-OOPs/15-Structural-Design-Patterns.md) · [notebook](04-OOPs/15-Structural-Design-Patterns.ipynb)
+- [ ] [16-Behavioral-Design-Patterns](04-OOPs/16-Behavioral-Design-Patterns.py) · [notes](04-OOPs/16-Behavioral-Design-Patterns.md) · [notebook](04-OOPs/16-Behavioral-Design-Patterns.ipynb)
+- [ ] [17-Pythonic-Patterns-And-Anti-Patterns](04-OOPs/17-Pythonic-Patterns-And-Anti-Patterns.py) · [notes](04-OOPs/17-Pythonic-Patterns-And-Anti-Patterns.md) · [notebook](04-OOPs/17-Pythonic-Patterns-And-Anti-Patterns.ipynb)
 
 **05-Python Advanced**
 
@@ -198,8 +207,6 @@ Tick items as you finish them (edit this file).
 
 ## Not covered yet (planned)
 
-- OOP depth: descriptors, `__getattr__`, `__init_subclass__`, composition vs
-  inheritance, design patterns.
 - NumPy/Pandas deepening and plotting (matplotlib).
 - Applied Python: HTTP/web APIs, scraping, databases, automation.
 - Practice exercises with solutions and capstone projects.
