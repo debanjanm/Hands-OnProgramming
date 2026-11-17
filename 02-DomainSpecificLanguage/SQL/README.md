@@ -20,27 +20,50 @@ python3 tools/run_notebooks.py --save         # ...and save the outputs into the
 python3 tools/run_notebooks.py --only Joins   # one topic
 ```
 
-## Topics
+A few notebooks use SQLite features that depend on how your SQLite was built (math
+functions, FTS5, R-Tree, `dbstat`) or on a recent version (`group_concat(... ORDER BY)` needs
+3.44+, `->>` needs 3.38+). Check yours with `python3 -c "import sqlite3; print(sqlite3.sqlite_version)"`.
+
+## Topics (34 notebooks)
 
 | Notebook | Covers |
 |---|---|
-| [01-Basics/01-Fundamentals](01-Basics/01-Fundamentals.ipynb) | `CREATE TABLE`, SQLite type affinity and `STRICT`, `INSERT` variants, `SELECT`, `ORDER BY`, `LIMIT`/`OFFSET` and keyset paging, `DISTINCT`, execution order |
-| [01-Basics/02-Filtering-And-Operators](01-Basics/02-Filtering-And-Operators.ipynb) | three-valued logic, `NULL` traps, `LIKE`/`GLOB`, `IN`/`NOT IN`, `BETWEEN`, `CASE`, `COALESCE`/`NULLIF`/`IIF`, precedence, mixed-type comparison |
-| [02-Querying/01-Joins](02-Querying/01-Joins.ipynb) | all join types, `ON` vs `WHERE`, anti/semi joins, self and many-to-many joins, join fan-out, `CROSS JOIN` |
-| [02-Querying/02-Aggregation-And-Grouping](02-Querying/02-Aggregation-And-Grouping.ipynb) | `COUNT` variants, `GROUP BY`/`HAVING`, `FILTER`, conditional aggregation, `GROUP_CONCAT`, subtotals, fan-out traps |
-| [02-Querying/03-Subqueries-And-CTEs](02-Querying/03-Subqueries-And-CTEs.ipynb) | scalar/correlated subqueries, `EXISTS` vs `IN`, CTE chains, `MATERIALIZED`, recursive CTEs (series, trees, graphs) |
-| [02-Querying/04-Set-Operations](02-Querying/04-Set-Operations.ipynb) | `UNION`/`INTERSECT`/`EXCEPT`, duplicates, precedence, table diffs, emulating `FULL OUTER JOIN` |
-| [03-Window-Functions/01-Window-Functions](03-Window-Functions/01-Window-Functions.ipynb) | ranking, `LAG`/`LEAD`, value functions, frames (`ROWS`/`RANGE`/`GROUPS`), running and moving totals, top-N per group, dedupe |
-| [05-DDL-And-Integrity/01-Constraints-And-Keys](05-DDL-And-Integrity/01-Constraints-And-Keys.ipynb) | keys, foreign-key actions, deferred constraints, `UNIQUE`/`CHECK`/`DEFAULT`, generated columns, `STRICT`, `WITHOUT ROWID`, table rebuild |
-| [05-DDL-And-Integrity/02-Views-And-Triggers](05-DDL-And-Integrity/02-Views-And-Triggers.ipynb) | views, `INSTEAD OF` triggers, audit and validation triggers, summary tables, trigger gotchas |
-| [06-Data-Modification/01-Data-Modification](06-Data-Modification/01-Data-Modification.ipynb) | `UPDATE`/`DELETE`, `UPDATE ... FROM`, upsert, `REPLACE` vs upsert, `RETURNING`, bulk copy, soft deletes |
-| [06-Data-Modification/02-Transactions](06-Data-Modification/02-Transactions.ipynb) | ACID, `BEGIN` modes, savepoints, rollback, locking and WAL, lost updates, deferred foreign keys |
-| [07-Performance/01-Indexes-And-Query-Plans](07-Performance/01-Indexes-And-Query-Plans.ipynb) | B-tree intuition, `EXPLAIN QUERY PLAN`, covering/composite/partial/expression indexes, when indexes are ignored, `ANALYZE` |
-| [09-Design/01-Normalization-And-Design](09-Design/01-Normalization-And-Design.ipynb) | 1NF to BCNF, anomalies, keys, relationship modelling, denormalizing on purpose, money/dates/enums, a worked schema |
+| [01-Basics/01-Fundamentals](01-Basics/01-Fundamentals.ipynb) | Creating tables, SQLite's flexible type system, inserting rows, basic SELECT, filtering, sorting, paging, DISTINCT, and the order in which SQL really runs. |
+| [01-Basics/02-Filtering-And-Operators](01-Basics/02-Filtering-And-Operators.ipynb) | Comparison and logic operators, NULL and three-valued logic, LIKE/GLOB, IN, BETWEEN, CASE, COALESCE/NULLIF/IIF, operator precedence, and the number/text quirks of SQLite. |
+| [01-Basics/03-String-And-Text-Functions](01-Basics/03-String-And-Text-Functions.ipynb) | Measuring, slicing and searching text: `length`, `substr`, `instr`, `replace`, `trim` and friends. |
+| [01-Basics/04-Math-And-Numbers](01-Basics/04-Math-And-Numbers.ipynb) | Integer vs real arithmetic, the `/` and `%` operators, and what `CAST` really does. |
+| [01-Basics/05-Dates-And-Times](01-Basics/05-Dates-And-Times.ipynb) | How SQLite stores dates (it has **no date type**): ISO-8601 TEXT, Julian day REAL, or Unix time INTEGER. |
+| [02-Querying/01-Joins](02-Querying/01-Joins.ipynb) | Combining rows from two or more tables: INNER, LEFT, RIGHT, FULL OUTER, CROSS and self-joins. |
+| [02-Querying/02-Aggregation-And-Grouping](02-Querying/02-Aggregation-And-Grouping.ipynb) | Aggregate functions (COUNT, SUM, AVG, MIN, MAX, TOTAL, GROUP_CONCAT) that collapse many rows into one value. |
+| [02-Querying/03-Subqueries-And-CTEs](02-Querying/03-Subqueries-And-CTEs.ipynb) | Subqueries: a SELECT inside another statement (scalar, row, table; in WHERE, FROM, SELECT). |
+| [02-Querying/04-Set-Operations](02-Querying/04-Set-Operations.ipynb) | `UNION`, `UNION ALL`, `INTERSECT`, `EXCEPT` and how they treat duplicates and NULLs. |
+| [03-Window-Functions/01-Window-Functions](03-Window-Functions/01-Window-Functions.ipynb) | Window functions vs `GROUP BY`, `OVER (PARTITION BY ... ORDER BY ...)`. |
+| [04-Patterns/01-Top-N-And-Ranking-Patterns](04-Patterns/01-Top-N-And-Ranking-Patterns.ipynb) | Top-N overall and top-N per group with `ROW_NUMBER`, `RANK`, `DENSE_RANK`. |
+| [04-Patterns/02-Gaps-Islands-And-Sessions](04-Patterns/02-Gaps-Islands-And-Sessions.ipynb) | Islands (unbroken runs) and gaps (the holes between runs) in numbers, dates and statuses. |
+| [04-Patterns/03-Pivot-Unpivot-And-Crosstabs](04-Patterns/03-Pivot-Unpivot-And-Crosstabs.ipynb) | Turning rows into columns (pivot) and columns into rows (unpivot) in SQLite, which has no `PIVOT` keyword. |
+| [04-Patterns/04-Time-Series-Patterns](04-Patterns/04-Time-Series-Patterns.ipynb) | Calendar (date spine) tables built with a recursive CTE, so days with no data show up as zero. |
+| [04-Patterns/05-Cohorts-Retention-And-Funnels](04-Patterns/05-Cohorts-Retention-And-Funnels.ipynb) | Signup cohorts, the retention matrix (month 0, 1, 2, ...), churn, rolling retention, new vs returning vs resurrected users. |
+| [04-Patterns/06-Hierarchies-And-Graphs](04-Patterns/06-Hierarchies-And-Graphs.ipynb) | Trees stored as an adjacency list (`id`, `parent_id`) and queried with recursive CTEs: descendants, ancestors, depth, paths, leaves, subtree totals, level by level. |
+| [04-Patterns/07-Data-Cleaning-And-Quality-In-SQL](04-Patterns/07-Data-Cleaning-And-Quality-In-SQL.ipynb) | Profiling a table: row counts, NULLs, distinct values, min/max, lengths and shapes. |
+| [04-Patterns/08-Analytics-Recipes](04-Patterns/08-Analytics-Recipes.ipynb) | Customer analytics: RFM segmentation (`NTILE`), customer lifetime value, basket size and AOV. |
+| [05-DDL-And-Integrity/01-Constraints-And-Keys](05-DDL-And-Integrity/01-Constraints-And-Keys.ipynb) | How a table protects its own data: PRIMARY KEY, FOREIGN KEY, UNIQUE, CHECK, NOT NULL, DEFAULT. |
+| [05-DDL-And-Integrity/02-Views-And-Triggers](05-DDL-And-Integrity/02-Views-And-Triggers.ipynb) | Views: saved SELECTs you can query like tables, and how to make them writable. |
+| [05-DDL-And-Integrity/03-Schema-Evolution-And-Migrations](05-DDL-And-Integrity/03-Schema-Evolution-And-Migrations.ipynb) | Changing a table after it has data: `ALTER TABLE` ADD / RENAME / DROP COLUMN, and what SQLite refuses to do. |
+| [06-Data-Modification/01-Data-Modification](06-Data-Modification/01-Data-Modification.ipynb) | Changing data: INSERT (all the variants), UPDATE, DELETE, UPSERT, RETURNING, copying data between tables, and changing a table's shape with ALTER TABLE. |
+| [06-Data-Modification/02-Transactions](06-Data-Modification/02-Transactions.ipynb) | How to group several statements into one all-or-nothing unit (a transaction), how SQLite handles locks and concurrency, and the classic mistakes (lost updates, half-finished work). |
+| [06-Data-Modification/03-Bulk-Loading-And-Export](06-Data-Modification/03-Bulk-Loading-And-Export.ipynb) | Getting lots of rows IN: CSV, JSON, `INSERT ... SELECT`, `executemany`, staging tables, upserts, deduplication and handling bad rows. |
+| [06-Data-Modification/04-History-Audit-And-Temporal-Data](06-Data-Modification/04-History-Audit-And-Temporal-Data.ipynb) | Keeping the past instead of overwriting it: soft delete, audit-log triggers, history tables, and "valid from / valid to" rows (SCD type 2). |
+| [07-Performance/01-Indexes-And-Query-Plans](07-Performance/01-Indexes-And-Query-Plans.ipynb) | What an index is, how SQLite uses it, and how to see that with `EXPLAIN QUERY PLAN`. |
+| [07-Performance/02-Query-Optimization-Patterns](07-Performance/02-Query-Optimization-Patterns.ipynb) | A catalogue of common slow-query patterns ("anti-patterns"), each with a rewrite that does less work. |
+| [07-Performance/03-Pragmas-Storage-And-Maintenance](07-Performance/03-Pragmas-Storage-And-Maintenance.ipynb) | How SQLite stores a database in one file: fixed-size **pages**, **B-trees** for tables and indexes, and a **freelist** of unused pages. |
+| [08-SQLite-Specials/01-JSON-In-SQLite](08-SQLite-Specials/01-JSON-In-SQLite.ipynb) | SQLite's built-in JSON functions: reading (`json_extract`, `->`, `->>`), writing (`json_set`, `json_insert`, `json_replace`, `json_remove`, `json_patch`), building (`json_object`, `json_array`, `json_group_array`,... |
+| [08-SQLite-Specials/02-Full-Text-Search-FTS5](08-SQLite-Specials/02-Full-Text-Search-FTS5.ipynb) | Creating FTS5 virtual tables, loading them, and searching with `MATCH`. |
+| [08-SQLite-Specials/03-Attach-Backup-And-The-CLI](08-SQLite-Specials/03-Attach-Backup-And-The-CLI.ipynb) | `ATTACH DATABASE` to work with several database files (or in-memory databases) on one connection, schema-qualified names (`main.`, `temp.` and the name you give in `ATTACH`), and cross-database joins and copies. |
+| [08-SQLite-Specials/04-SQLite-With-Python](08-SQLite-Specials/04-SQLite-With-Python.ipynb) | Using Python's built-in `sqlite3` module as a SQL playground: parameters, cursors, row factories, type adapters. |
+| [08-SQLite-Specials/05-RTree-Virtual-Tables-And-Extensions](08-SQLite-Specials/05-RTree-Virtual-Tables-And-Extensions.ipynb) | Virtual tables: tables that look normal in SQL but are backed by code (R-Tree, FTS5, DBSTAT, GEOPOLY, `json_each`, `pragma_*`). |
+| [09-Design/01-Normalization-And-Design](09-Design/01-Normalization-And-Design.ipynb) | How to decide which tables and columns you need: normal forms (1NF, 2NF, 3NF, BCNF), the problems bad design causes (anomalies), keys, relationships, and practical column-type choices (money, dates, enums, JSON).... |
 
 ## Planned next
 
-`04-Patterns` (top-N, gaps and islands, pivot, cohorts, funnels), more `01-Basics`
-(functions, dates, NULL semantics), `08-SQLite-Specials` (JSON, FTS5, `ATTACH`, CLI),
-`10-Dialects` (SQLite vs PostgreSQL vs MySQL), `11-Practice` (problems with tests) and
-`12-Projects`.
+`10-Dialects` (SQLite vs PostgreSQL vs MySQL), `11-Practice` (problems with tests on four
+datasets) and `12-Projects` (three capstones).

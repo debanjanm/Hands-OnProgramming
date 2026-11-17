@@ -38,8 +38,22 @@ def scrub(text):
     return TMP.sub("<tmp>", text)
 
 
+def merge_streams(cell):
+    """Join adjacent stdout/stderr chunks so the saved file does not depend on flush timing."""
+    merged = []
+    for out in cell.get("outputs", []):
+        if (merged and out.get("output_type") == "stream" and merged[-1].get("output_type") == "stream"
+                and merged[-1]["name"] == out["name"]):
+            merged[-1]["text"] += out["text"]
+        else:
+            merged.append(out)
+    cell["outputs"] = merged
+
+
 def scrub_outputs(nb):
     for cell in nb.cells:
+        if cell.cell_type == "code":
+            merge_streams(cell)
         for out in cell.get("outputs", []):
             if "text" in out:
                 out["text"] = scrub(out["text"])
