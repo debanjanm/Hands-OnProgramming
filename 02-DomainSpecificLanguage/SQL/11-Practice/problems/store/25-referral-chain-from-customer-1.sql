@@ -1,0 +1,8 @@
+-- Title: Referral chain from customer 1
+-- Level: hard
+-- Task: customers.referred_by points to the customer who referred them. Starting from customer 1,
+--   find everyone they referred directly (depth 1) or indirectly (depth 2, 3, ...). Do not
+--   include customer 1 itself. Return customer_id, depth, path (the ids from customer 1 down to
+--   this customer joined by '>', e.g. '1>5'). Sort by depth ascending, ties by customer_id ascending.
+-- Hint: see 04-Patterns/06-Hierarchies-And-Graphs and 02-Querying/03-Subqueries-And-CTEs
+-- Ordered: yes

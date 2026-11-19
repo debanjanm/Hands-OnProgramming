@@ -1,0 +1,7 @@
+-- Title: Line items of the first ten orders
+-- Level: easy
+-- Task: For order_items belonging to orders 1 to 10, return order_id, product_name
+--   (products.name), quantity, line_total (ROUND(quantity * unit_price, 2)). Sort by item_id
+--   ascending.
+-- Hint: see 02-Querying/01-Joins (INNER JOIN)
+-- Ordered: yes

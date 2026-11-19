@@ -1,0 +1,8 @@
+-- Title: Paid revenue pivot: country by payment method
+-- Level: hard
+-- Task: Pivot paid payments (status 'paid') into one row per customer country (the country of the
+--   customer who placed the order; customers with NULL country are excluded) and one column per
+--   method. Return country, card, paypal, upi, bank_transfer where each is SUM(amount) for that
+--   method, ROUND(x, 2), and 0 when the country has no such payments. Sort by country.
+-- Hint: see 04-Patterns/03-Pivot-Unpivot-And-Crosstabs
+-- Ordered: yes

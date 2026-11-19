@@ -1,0 +1,9 @@
+-- Title: Return rate by category
+-- Level: medium
+-- Task: Per product category (products.category_id, show categories.name as category) return
+--   category, items_sold (number of order_items rows), items_returned (number of those rows that
+--   have a returns row), return_rate_pct = ROUND(100.0 * items_returned / items_sold, 2). Keep
+--   only categories with at least one returned item. Sort by the rounded return_rate_pct descending, ties by
+--   category ascending.
+-- Hint: see 02-Querying/01-Joins (LEFT JOIN) and 02-Querying/02-Aggregation-And-Grouping
+-- Ordered: yes

@@ -24,7 +24,7 @@ A few notebooks use SQLite features that depend on how your SQLite was built (ma
 functions, FTS5, R-Tree, `dbstat`) or on a recent version (`group_concat(... ORDER BY)` needs
 3.44+, `->>` needs 3.38+). Check yours with `python3 -c "import sqlite3; print(sqlite3.sqlite_version)"`.
 
-## Topics (34 notebooks)
+## Topics (38 notebooks)
 
 | Notebook | Covers |
 |---|---|
@@ -62,8 +62,26 @@ functions, FTS5, R-Tree, `dbstat`) or on a recent version (`group_concat(... ORD
 | [08-SQLite-Specials/04-SQLite-With-Python](08-SQLite-Specials/04-SQLite-With-Python.ipynb) | Using Python's built-in `sqlite3` module as a SQL playground: parameters, cursors, row factories, type adapters. |
 | [08-SQLite-Specials/05-RTree-Virtual-Tables-And-Extensions](08-SQLite-Specials/05-RTree-Virtual-Tables-And-Extensions.ipynb) | Virtual tables: tables that look normal in SQL but are backed by code (R-Tree, FTS5, DBSTAT, GEOPOLY, `json_each`, `pragma_*`). |
 | [09-Design/01-Normalization-And-Design](09-Design/01-Normalization-And-Design.ipynb) | How to decide which tables and columns you need: normal forms (1NF, 2NF, 3NF, BCNF), the problems bad design causes (anomalies), keys, relationships, and practical column-type choices (money, dates, enums, JSON).... |
+| [09-Design/02-Dimensional-Modeling-And-Star-Schemas](09-Design/02-Dimensional-Modeling-And-Star-Schemas.ipynb) | How to shape data for reporting (OLAP) instead of for day-to-day writes (OLTP): facts, dimensions, grain, star vs snowflake. |
+| [09-Design/03-Schema-Design-Case-Studies](09-Design/03-Schema-Design-Case-Studies.ipynb) | Three complete designs, each walked through the same way: plain-English requirements, entities, a text ER sketch, `CREATE TABLE` with constraints and indexes, seed data, the queries the app really needs, and... |
+| [10-Dialects/01-SQLite-vs-PostgreSQL-vs-MySQL](10-Dialects/01-SQLite-vs-PostgreSQL-vs-MySQL.ipynb) | A side-by-side cheat sheet of the places where SQLite, PostgreSQL and MySQL differ in daily work. |
+| [10-Dialects/02-Writing-Portable-SQL](10-Dialects/02-Writing-Portable-SQL.ipynb) | What the portable core of SQL is, what to avoid, and how to adapt a query for another database. |
+
+The `10-Dialects` notebooks compare SQLite with PostgreSQL and MySQL. Only the SQLite cells
+(and SQLAlchemy's compiled SQL text) can run here, so the PostgreSQL 16 and MySQL 8.x
+statements come from their documentation, not from a server: check them against your version.
+
+## Practice
+
+[`11-Practice`](11-Practice/README.md) has graded problems you solve in plain `.sql` files,
+checked by `pytest` against a seeded dataset. Start with the `store` shop dataset (30 problems,
+easy to hard):
+
+```bash
+pytest 11-Practice                 # check your answers
+pytest 11-Practice --solutions     # check the reference answers
+```
 
 ## Planned next
 
-`10-Dialects` (SQLite vs PostgreSQL vs MySQL), `11-Practice` (problems with tests on four
-datasets) and `12-Projects` (three capstones).
+More practice datasets (`hr`, `streaming`, `bank`) and three capstone projects in `12-Projects`.

@@ -1,0 +1,18 @@
+-- Title: Monthly revenue of live orders
+-- Level: medium
+-- Task: Consider orders whose status is not 'cancelled'. Per calendar month of order_date (text
+--   'YYYY-MM', column month) return month, orders (number of distinct such orders that have at
+--   least one item), revenue (SUM(quantity * unit_price) of their items, ROUND(x, 2)). Sort by
+--   month ascending.
+-- Hint: strftime('%Y-%m', d): see 01-Basics/05-Dates-And-Times and 04-Patterns/04-Time-Series-
+--   Patterns
+-- Ordered: yes
+
+SELECT strftime('%Y-%m', o.order_date) AS month,
+       COUNT(DISTINCT o.order_id) AS orders,
+       ROUND(SUM(i.quantity * i.unit_price), 2) AS revenue
+FROM orders o
+JOIN order_items i ON i.order_id = o.order_id
+WHERE o.status <> 'cancelled'
+GROUP BY month
+ORDER BY month;
