@@ -1,0 +1,9 @@
+-- Title: Consecutive-month buying streaks
+-- Level: hard
+-- Task: A buying month is a calendar month in which a customer placed at least one non-cancelled
+--   order. Find every streak of 2 or more consecutive buying months per customer (a streak must
+--   be as long as possible, not extendable on either side). Return customer_id, start_month,
+--   end_month (both 'YYYY-MM'), months (streak length). Sort by customer_id, then start_month.
+-- Hint: classic islands trick, month number minus ROW_NUMBER: see 04-Patterns/02-Gaps-Islands-
+--   And-Sessions
+-- Ordered: yes

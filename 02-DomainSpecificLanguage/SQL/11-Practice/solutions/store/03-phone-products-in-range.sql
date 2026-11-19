@@ -1,0 +1,13 @@
+-- Title: Phone-like products in a price range
+-- Level: easy
+-- Task: Find products whose name contains the text 'Phone', matched case-insensitively as LIKE does in SQLite (this also matches 'Headphones' and
+--   'Phone Case') and whose price is between 20 and 250 inclusive. Return product_id, name,
+--   price, sorted by price ascending, ties by product_id ascending.
+-- Hint: see 01-Basics/02-Filtering-And-Operators (LIKE, BETWEEN)
+-- Ordered: yes
+
+SELECT product_id, name, price
+FROM products
+WHERE name LIKE '%Phone%'
+  AND price BETWEEN 20 AND 250
+ORDER BY price, product_id;
