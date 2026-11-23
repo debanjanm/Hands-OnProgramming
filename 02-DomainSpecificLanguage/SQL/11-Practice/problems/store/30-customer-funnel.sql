@@ -1,0 +1,12 @@
+-- Title: Customer funnel
+-- Level: hard
+-- Task: Build a funnel over all customers, each stage a subset of the previous one. Stage 1
+--   'signed_up': every customer. Stage 2 'ordered': of those, customers with at least one order
+--   (any status). Stage 3 'paid': of those, customers with a payment of status 'paid' on one of
+--   their orders. Stage 4 'delivered': of those, customers with an order whose status is
+--   'delivered'. Stage 5 'reviewed': of those, customers who wrote a review with a non-NULL
+--   rating. Return stage_no (1-5), stage (the quoted names), customers (count), pct_of_signups
+--   (ROUND(100.0 * customers / stage-1 count, 2)). Sort by stage_no.
+-- Hint: per-customer flags in a CTE, then UNION ALL one row per stage: see
+--   04-Patterns/05-Cohorts-Retention-And-Funnels
+-- Ordered: yes

@@ -1,0 +1,9 @@
+-- Title: Signup cohort, next-month retention
+-- Level: hard
+-- Task: Cohort = calendar month of signup_date ('YYYY-MM', column cohort_month). For each cohort
+--   return cohort_month, cohort_size (customers in it), retained (customers of the cohort with at
+--   least one non-cancelled order placed in the calendar month right after their signup month),
+--   retention_pct = ROUND(100.0 * retained / cohort_size, 2). Include cohorts with zero retained.
+--   Sort by cohort_month.
+-- Hint: see 04-Patterns/05-Cohorts-Retention-And-Funnels
+-- Ordered: yes

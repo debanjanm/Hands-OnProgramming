@@ -1,0 +1,6 @@
+-- Title: Active products, priciest first
+-- Level: easy
+-- Task: List every active product (active = 1). Return product_id, name, price, sorted by price
+--   from highest to lowest, ties broken by product_id ascending.
+-- Hint: see 01-Basics/01-Fundamentals and 01-Basics/02-Filtering-And-Operators
+-- Ordered: yes

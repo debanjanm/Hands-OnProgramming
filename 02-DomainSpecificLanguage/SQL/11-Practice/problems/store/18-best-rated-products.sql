@@ -1,0 +1,7 @@
+-- Title: Best rated products
+-- Level: medium
+-- Task: For each product with at least 3 reviews that carry a rating, return product_id, name,
+--   rated_reviews (number of reviews with a non-NULL rating), avg_rating (ROUND(AVG(rating), 2)).
+--   Sort by the rounded avg_rating descending, ties by product_id ascending.
+-- Hint: see 02-Querying/02-Aggregation-And-Grouping
+-- Ordered: yes

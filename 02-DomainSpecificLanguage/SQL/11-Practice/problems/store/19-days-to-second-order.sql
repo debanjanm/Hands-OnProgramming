@@ -1,0 +1,8 @@
+-- Title: Days between first and second order
+-- Level: medium
+-- Task: For customers with at least two orders (any status), return customer_id,
+--   first_order_date, second_order_date, days_between (whole days between the two, second minus
+--   first). Order the orders of a customer by order_date, then order_id, to decide which is first
+--   and second. Sort by customer_id.
+-- Hint: see 03-Window-Functions/01-Window-Functions and 01-Basics/05-Dates-And-Times (julianday)
+-- Ordered: yes

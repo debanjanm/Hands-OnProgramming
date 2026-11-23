@@ -1,0 +1,8 @@
+-- Title: Average rating and the NULL trap
+-- Level: easy
+-- Task: Some reviews have no rating (NULL). Return one row with: review_count (all reviews),
+--   rated_count (reviews with a rating), avg_rating (ROUND(AVG(rating), 2), NULLs ignored),
+--   avg_if_missing_zero (ROUND of the average when a missing rating counts as 0, 2 decimals).
+-- Hint: see 02-Querying/02-Aggregation-And-Grouping (aggregates skip NULLs) and COALESCE in
+--   01-Basics/04-Math-And-Numbers
+-- Ordered: no
