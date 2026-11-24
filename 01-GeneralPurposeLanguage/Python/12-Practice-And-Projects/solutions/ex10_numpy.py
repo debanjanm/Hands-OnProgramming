@@ -75,11 +75,11 @@ def top_k_indices(x, k):
 
     Example: top_k_indices([5, 9, 1, 9], 2) -> [1, 3]
     Level: medium
-    Hint: argsort the negated array with kind="stable" and slice.
+    Hint: sort without negating unsigned integers; preserve original index order for ties.
     """
     x = np.asarray(x)
-    # Stable sort keeps equal values in index order.
-    return np.argsort(-x, kind="stable")[:k]
+    # Reversing both sides gives descending order without unsigned negation.
+    return (len(x) - 1 - np.argsort(x[::-1], kind="stable")[::-1])[:k]
 
 
 def block_sums(a, k):

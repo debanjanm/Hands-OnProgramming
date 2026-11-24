@@ -249,7 +249,16 @@ async def async_pipeline(items, func, n_workers=3):
                 return
             results[index] = await func(item)
 
-    await asyncio.gather(*(worker() for _ in range(n_workers)))
+    if n_workers < 1:
+        raise ValueError("n_workers must be at least 1")
+    tasks = [asyncio.create_task(worker()) for _ in range(n_workers)]
+    try:
+        await asyncio.gather(*tasks)
+    finally:
+        for task in tasks:
+            if not task.done():
+                task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
     return results
 
 

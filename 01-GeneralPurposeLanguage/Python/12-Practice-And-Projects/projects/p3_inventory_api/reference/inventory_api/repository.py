@@ -1,6 +1,8 @@
 """sqlite3 storage. No FastAPI in here, so it can be tested on its own."""
 import sqlite3
 
+from .models import MAX_SQLITE_INT, MIN_SQLITE_INT
+
 
 class NotFound(Exception):
     """No product with that id."""
@@ -107,12 +109,21 @@ class ProductRepository:
 
     def adjust_stock(self, product_id: int, delta: int) -> dict:
         """Add `delta` (may be negative) to stock. Never goes below 0 -> InsufficientStock."""
+        if not MIN_SQLITE_INT <= delta <= MAX_SQLITE_INT:
+            raise ValueError("delta is outside SQLite's integer range")
+        # Compare before adding so SQLite cannot promote an overflowing integer to REAL.
+        lower, upper = max(0, -delta), min(MAX_SQLITE_INT, MAX_SQLITE_INT - delta)
+        if lower > upper:
+            product = self.get(product_id)
+            raise InsufficientStock(f"only {product['stock']} in stock, cannot remove {-delta}")
         cur = self._db.execute(
-            "UPDATE products SET stock = stock + ? WHERE id = ? AND stock + ? >= 0",
-            (delta, product_id, delta),
+            "UPDATE products SET stock = stock + ? WHERE id = ? AND stock BETWEEN ? AND ?",
+            (delta, product_id, lower, upper),
         )
         self._db.commit()
         if cur.rowcount == 0:
             product = self.get(product_id)  # raises NotFound if the id is wrong
+            if delta > 0:
+                raise Conflict("stock would exceed SQLite's maximum integer")
             raise InsufficientStock(f"only {product['stock']} in stock, cannot remove {-delta}")
         return self.get(product_id)

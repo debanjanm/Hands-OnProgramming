@@ -64,3 +64,6 @@ At first tests fail with `NotImplementedError`. That is expected.
 - Parse the "combined" format (referer and user agent).
 - Read from stdin when LOGFILE is `-`.
 - Top N slowest endpoints by p95.
+
+
+Hourly reports use UTC, so timestamps with different offsets share the correct hour. `parse_lines(..., bad=list)` still collects diagnostics; `on_bad=callback` allows counting without storing lines. The CLI uses the callback for bounded malformed-line memory.

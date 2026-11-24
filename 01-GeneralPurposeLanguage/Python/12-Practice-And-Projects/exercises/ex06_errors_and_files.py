@@ -231,14 +231,14 @@ def list_by_extension(folder):
 
 def safe_write(path, text):
     """Write `text` to `path` safely: create missing parent folders, write to a
-    temporary sibling file `<name>.tmp` first, then rename it over the target
+    uniquely created temporary sibling file first, then rename it over the target
     (so a crash never leaves a half-written file). Return the Path. No .tmp file
     may remain afterwards.
 
     safe_write(tmp / "a" / "b.txt", "hi") -> Path; file contains "hi"
 
     Level: hard
-    Hint: path.parent.mkdir(parents=True, exist_ok=True); tmp.write_text(...); tmp.replace(path).
+    Hint: tempfile.NamedTemporaryFile in path.parent; close before replace; clean up in finally.
     """
     raise NotImplementedError
 

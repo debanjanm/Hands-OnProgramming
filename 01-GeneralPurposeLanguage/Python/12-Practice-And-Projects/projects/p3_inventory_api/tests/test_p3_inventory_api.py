@@ -249,3 +249,25 @@ def test_repository_errors():
     with pytest.raises(r.Conflict):
         repo.create(name="B", sku="A", price=1)
     assert issubclass(r.InsufficientStock, r.Conflict)
+
+
+@pytest.mark.parametrize("change", [{"stock": 2**63}, {"price": "inf"}, {"price": "nan"}])
+def test_create_rejects_out_of_range_numbers(client, change):
+    body = {"name": "X", "sku": "X", "price": 1, **change}
+    assert client.post("/products", json=body).status_code == 422
+    assert client.get("/products").json()["total"] == 0
+
+
+def test_stock_addition_cannot_overflow(client):
+    product = make(client, stock=2**63 - 1)
+    assert client.post(f"/products/{product['id']}/stock", json={"delta": 1}).status_code == 409
+    assert client.get(f"/products/{product['id']}").json()["stock"] == 2**63 - 1
+    assert client.post(f"/products/{product['id']}/stock", json={"delta": -(2**63)}).status_code == 409
+
+
+def test_identifiers_delta_and_price_filters_are_bounded(client):
+    product = make(client)
+    assert client.get(f"/products/{2**63}").status_code == 422
+    assert client.post(f"/products/{product['id']}/stock", json={"delta": 2**63}).status_code == 422
+    assert client.patch(f"/products/{product['id']}", json={"price": "inf"}).status_code == 422
+    assert client.get("/products", params={"min_price": "inf"}).status_code == 422

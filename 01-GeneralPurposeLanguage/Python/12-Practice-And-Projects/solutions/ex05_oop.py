@@ -317,6 +317,7 @@ class EventEmitter:
             handlers.remove(callback)
 
     def emit(self, event, *args, **kwargs):
-        for callback in list(self._handlers.get(event, [])):  # copy: handlers may call off()
+        callbacks = list(self._handlers.get(event, []))
+        for callback in callbacks:  # handlers may change subscriptions
             callback(*args, **kwargs)
-        return len(self._handlers.get(event, []))
+        return len(callbacks)

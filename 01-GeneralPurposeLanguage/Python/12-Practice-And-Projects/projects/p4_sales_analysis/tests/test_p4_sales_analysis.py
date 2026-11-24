@@ -45,7 +45,7 @@ def products():
 
 def test_clean_products(products):
     out = mod("clean").clean_products(products)
-    assert_frame_equal(out, pd.DataFrame({"product_id": [1, 2], "category": ["A", "Uncategorized"], "price": [10.0, 5.0]}))
+    assert_frame_equal(out, pd.DataFrame({"product_id": [1, 2], "category": pd.Series(["A", "Uncategorized"], dtype="object"), "price": [10.0, 5.0]}))
 
 
 def test_clean_customers():

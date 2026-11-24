@@ -214,3 +214,13 @@ def test_nearest_neighbor_tie_picks_smaller_index(ex):
 
 def test_nearest_neighbor_two_points(ex):
     assert_array_equal(ex.nearest_neighbor([[0, 0], [5, 5]]), [1, 0])
+
+
+@pytest.mark.parametrize("dtype", [np.uint8, np.uint64, np.int8])
+def test_top_k_indices_handles_integer_limits_and_ties(ex, dtype):
+    values = np.array([0, 5, 9, 9], dtype=dtype)
+    assert_array_equal(ex.top_k_indices(values, 3), [2, 3, 1])
+
+
+def test_top_k_indices_handles_minimum_signed_integer(ex):
+    assert_array_equal(ex.top_k_indices(np.array([-128, 0, 127], dtype=np.int8), 2), [2, 1])

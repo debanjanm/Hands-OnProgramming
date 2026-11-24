@@ -74,3 +74,6 @@ At first almost everything fails with `NotImplementedError`. That is expected.
 - `list --sort due|priority`.
 - Recurring tasks (`--repeat weekly`).
 - Import from the CSV you exported.
+
+
+Tags cannot contain commas because the storage format uses commas as separators. Invalid tags raise ValueError (CLI exit code 2) before any task is written.

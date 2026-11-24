@@ -243,3 +243,9 @@ class TestCli:
         with caplog.at_level(logging.INFO, logger="taskman"):
             run("-v", "add", "logged")
         assert any("added task" in r.getMessage() for r in caplog.records)
+
+
+def test_tag_separator_is_rejected_before_write(store):
+    with pytest.raises(ValueError, match="comma"):
+        store.add("task", tags=["work,home"])
+    assert store.list(include_done=True) == []

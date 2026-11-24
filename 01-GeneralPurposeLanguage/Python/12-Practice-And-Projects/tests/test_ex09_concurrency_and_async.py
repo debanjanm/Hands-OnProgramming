@@ -385,3 +385,38 @@ def test_first_result_error_of_winner_propagates(ex):
 
     with pytest.raises(KeyError):
         asyncio.run(ex.first_result([blocked, bad]))
+
+
+def test_async_pipeline_failure_cleans_up_other_workers(ex):
+    async def run():
+        started = asyncio.Event()
+        cleaned = []
+        async def work(item):
+            if item == "fail":
+                await started.wait()
+                raise ValueError("failed")
+            started.set()
+            try:
+                await asyncio.Event().wait()
+            finally:
+                cleaned.append(item)
+        with pytest.raises(ValueError):
+            await ex.async_pipeline(["fail", "waiting"], work, 2)
+        assert cleaned == ["waiting"]
+        assert not [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
+    asyncio.run(run())
+
+
+def test_async_pipeline_caller_cancellation_cleans_up(ex):
+    async def run():
+        started = asyncio.Event()
+        async def work(item):
+            started.set()
+            await asyncio.Event().wait()
+        task = asyncio.create_task(ex.async_pipeline([1, 2], work, 2))
+        await started.wait()
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+        assert not [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
+    asyncio.run(run())

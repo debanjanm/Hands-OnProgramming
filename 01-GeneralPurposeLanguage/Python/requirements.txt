@@ -37,3 +37,6 @@ jupyterlab
 ipykernel
 nbformat
 nbclient
+
+# TOML parser backport for Python 3.10 tooling/config examples
+tomli; python_version < "3.11"

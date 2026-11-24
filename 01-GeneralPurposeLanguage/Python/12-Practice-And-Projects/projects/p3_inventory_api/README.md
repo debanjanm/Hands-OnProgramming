@@ -53,3 +53,8 @@ python3 -c "import uvicorn; uvicorn.run('inventory_api:create_app', factory=True
 - Add `GET /products/low-stock?threshold=5`
 - Add a `StockMovement` history table written in the same transaction as each adjustment
 - Hash API keys, or allow several keys
+
+
+## Numeric limits
+
+Prices must be finite and non-negative. Stock is between 0 and `2**63 - 1`; deltas and identifiers fit SQLite signed 64-bit integers. Requests outside these ranges return 422. A stock adjustment that would leave the valid stock range returns 409 and changes nothing.
