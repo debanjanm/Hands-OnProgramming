@@ -13,7 +13,7 @@ def clean_customers(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def clean_products(df: pd.DataFrame) -> pd.DataFrame:
-    """Drop duplicate product_ids, missing category -> "Uncategorized"."""
+    """Drop duplicate product_ids, missing category -> "Uncategorized" (object dtype)."""
     out = df.drop_duplicates("product_id").copy()
     out["category"] = out["category"].astype("object").where(out["category"].notna(), "Uncategorized")
     return out.reset_index(drop=True)

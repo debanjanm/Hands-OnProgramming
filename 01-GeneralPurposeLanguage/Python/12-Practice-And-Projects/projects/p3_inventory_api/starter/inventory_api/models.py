@@ -1,6 +1,9 @@
 """Pydantic models: what the API accepts and returns."""
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+MAX_SQLITE_INT = 2**63 - 1
+MIN_SQLITE_INT = -(2**63)
+
 SKU_PATTERN = r"^[A-Za-z0-9-]+$"
 
 

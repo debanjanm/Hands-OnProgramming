@@ -390,3 +390,24 @@ def test_retry_passes_args_and_keeps_name(ex):
 def test_retry_rejects_bad_times(ex):
     with pytest.raises(ValueError):
         ex.retry(0)
+
+
+def test_safe_write_preserves_existing_temporary_sibling(ex, tmp_path):
+    sibling = tmp_path / "notes.tmp"
+    sibling.write_text("another file")
+    ex.safe_write(tmp_path / "notes", "updated")
+    assert sibling.read_text() == "another file"
+    assert (tmp_path / "notes").read_text() == "updated"
+
+
+def test_safe_write_cleans_up_after_replace_failure(ex, tmp_path, monkeypatch):
+    from pathlib import Path
+    target = tmp_path / "notes"
+    target.write_text("original")
+    def fail(*args):
+        raise OSError("replace failed")
+    monkeypatch.setattr(Path, "replace", fail)
+    with pytest.raises(OSError):
+        ex.safe_write(target, "new")
+    assert target.read_text() == "original"
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["notes"]

@@ -27,7 +27,7 @@ class TestParseLine:
         assert r.time.astimezone(timezone.utc).hour == 20
 
     def test_hour_bucket(self, parser_mod):
-        assert parser_mod.parse_line(GOOD).hour == "2023-10-10 13:00"
+        assert parser_mod.parse_line(GOOD).hour == "2023-10-10 20:00"
 
     def test_without_latency(self, parser_mod):
         line = '1.2.3.4 - - [10/Oct/2023:13:55:36 +0000] "GET / HTTP/1.0" 200 10'
@@ -271,3 +271,19 @@ class TestCli:
         c = make_log(seed=6)
         read = lambda p: Path(p).read_text()
         assert read(a) == read(b) != read(c)
+
+
+def test_same_instant_uses_same_hour(parser_mod, stats_mod):
+    other = GOOD.replace("13:55:36 -0700", "20:55:36 +0000")
+    stats = stats_mod.compute_stats(parser_mod.parse_lines([GOOD, other]))
+    assert dict(stats.by_hour) == {"2023-10-10 20:00": 2}
+
+
+def test_malformed_callback_counts_without_retaining_lines(parser_mod):
+    count = 0
+    def count_bad(line):
+        nonlocal count
+        assert line == "invalid"
+        count += 1
+    assert list(parser_mod.parse_lines(("invalid" for _ in range(10000)), on_bad=count_bad)) == []
+    assert count == 10000

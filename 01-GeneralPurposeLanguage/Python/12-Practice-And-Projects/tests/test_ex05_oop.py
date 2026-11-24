@@ -365,3 +365,12 @@ def test_emitter_callback_can_remove_itself(ex):
     e.emit("go")
     e.emit("go")
     assert seen == ["once", "other", "other"]
+
+
+def test_emitter_counts_callbacks_that_remove_themselves(ex):
+    emitter = ex.EventEmitter()
+    def once():
+        emitter.off("event", once)
+    emitter.on("event", once)
+    assert emitter.emit("event") == 1
+    assert emitter.emit("event") == 0

@@ -118,6 +118,8 @@ class TaskStore:
             raise ValueError("title must not be empty")
         if priority not in PRIORITY_NAMES:
             raise ValueError(f"priority must be 1, 2 or 3, got {priority!r}")
+        if any("," in t for t in tags):
+            raise ValueError("tags must not contain commas")
         clean = sorted({t.strip().lower() for t in tags if t.strip()})
         cur = self._db.execute(
             "INSERT INTO tasks (title, priority, due, tags) VALUES (?, ?, ?, ?)",

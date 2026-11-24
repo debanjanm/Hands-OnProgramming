@@ -199,9 +199,20 @@ def safe_write(path, text):
     # write-then-rename pattern
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_name(path.name + ".tmp")
-    tmp.write_text(text, encoding="utf-8")
-    tmp.replace(path)  # replace is atomic on the same disk
+    import tempfile
+    with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent,
+                                     prefix=path.name + ".", suffix=".tmp", delete=False) as fh:
+        tmp = Path(fh.name)
+        try:
+            fh.write(text)
+        except BaseException:
+            fh.close()
+            tmp.unlink(missing_ok=True)
+            raise
+    try:
+        tmp.replace(path)  # same directory keeps the replacement on one filesystem
+    finally:
+        tmp.unlink(missing_ok=True)
     return path
 
 

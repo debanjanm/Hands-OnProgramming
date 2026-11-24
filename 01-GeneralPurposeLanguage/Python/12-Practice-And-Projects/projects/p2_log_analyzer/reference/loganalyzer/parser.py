@@ -8,8 +8,8 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from datetime import datetime
-from typing import Iterable, Iterator
+from datetime import datetime, timezone
+from typing import Callable, Iterable, Iterator
 
 LINE_RE = re.compile(
     r'^(?P<ip>\S+) (?P<ident>\S+) (?P<user>\S+) '
@@ -45,11 +45,11 @@ class LogRecord:
 
     @property
     def hour(self) -> str:
-        """The hour bucket as text, e.g. ``2023-10-10 13:00``.
+        """The UTC hour bucket as text, e.g. ``2023-10-10 13:00``.
 
         Milestone 3: stats.
         """
-        return self.time.strftime("%Y-%m-%d %H:00")
+        return self.time.astimezone(timezone.utc).strftime("%Y-%m-%d %H:00")
 
 
 def parse_line(line: str) -> LogRecord:
@@ -74,11 +74,13 @@ def parse_line(line: str) -> LogRecord:
     )
 
 
-def parse_lines(lines: Iterable[str], bad: list[str] | None = None) -> Iterator[LogRecord]:
+def parse_lines(lines: Iterable[str], bad: list[str] | None = None,
+                *, on_bad: Callable[[str], None] | None = None) -> Iterator[LogRecord]:
     """Lazily yield a record for every valid line.
 
     Milestone 2: pipeline. Blank lines are skipped silently. Malformed lines
     are skipped too, and appended to ``bad`` when a list is given.
+    ``on_bad`` receives each malformed line; use it for counting without retaining text.
     This must be a generator: never build a list of all the records.
     """
     for line in lines:
@@ -89,3 +91,5 @@ def parse_lines(lines: Iterable[str], bad: list[str] | None = None) -> Iterator[
         except ValueError:
             if bad is not None:
                 bad.append(line.rstrip("\n"))
+            if on_bad is not None:
+                on_bad(line.rstrip("\n"))

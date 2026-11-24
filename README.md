@@ -1,9 +1,9 @@
 # Hands-On Programming
 
 A practical collection of notebooks, exercises and projects covering core
-programming concepts across language categories. Python and SQL are Jupyter
-notebooks with their output saved, so they read well right here on GitHub and
-are easy to experiment with; Bash is still a set of runnable scripts.
+programming concepts across language categories. Everything is a Jupyter
+notebook with its output saved, so it reads well right here on GitHub and is
+easy to experiment with.
 
 ## Structure
 
@@ -11,7 +11,7 @@ are easy to experiment with; Bash is still a set of runnable scripts.
 |---|---|---|
 | [01-GeneralPurposeLanguage](01-GeneralPurposeLanguage/README.md) | Python | 123 notebooks from syntax through OOP and design patterns, async, the standard library, NumPy, Pandas, visualization and applied Python, plus practice exercises and projects |
 | [02-DomainSpecificLanguage](02-DomainSpecificLanguage/README.md) | SQL | 38 notebooks on SQLite: querying, windows, patterns, schema design, performance, JSON/FTS, dialects, plus auto-checked practice problems |
-| [03-Scripting](03-Scripting/README.md) | Bash | Shell fundamentals, control flow, text processing, process control |
+| [03-Scripting](03-Scripting/README.md) | Bash | 9 notebooks: shell fundamentals, control flow, functions, strings and arrays, pipes, text tools, files, processes and signals, advanced bash |
 
 Each category folder is named by kind, not by language, so a second language
 in the same category (e.g. another general-purpose or scripting language)

@@ -14,7 +14,7 @@ def clean_customers(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def clean_products(df: pd.DataFrame) -> pd.DataFrame:
-    """Drop duplicate product_ids, missing category -> "Uncategorized". Fresh index."""
+    """Drop duplicate product_ids, missing category -> "Uncategorized" (object dtype). Fresh index."""
     # TODO (milestone 2)
     raise NotImplementedError
 

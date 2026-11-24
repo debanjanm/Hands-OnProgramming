@@ -65,7 +65,7 @@ def top_k_indices(x, k):
 
     Example: top_k_indices([5, 9, 1, 9], 2) -> [1, 3]
     Level: medium
-    Hint: argsort the negated array with kind="stable" and slice.
+    Hint: sort without negating unsigned integers; preserve original index order for ties.
     """
     raise NotImplementedError
 

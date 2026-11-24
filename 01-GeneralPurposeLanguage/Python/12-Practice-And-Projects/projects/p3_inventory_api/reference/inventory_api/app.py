@@ -1,10 +1,10 @@
 """The FastAPI app: routes, API-key auth and error mapping."""
 import secrets
 
-from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Path, Query, Request
 from fastapi.responses import JSONResponse, Response
 
-from .models import Page, Product, ProductIn, ProductUpdate, StockAdjustment
+from .models import MAX_SQLITE_INT, MIN_SQLITE_INT, Page, Product, ProductIn, ProductUpdate, StockAdjustment
 from .repository import Conflict, NotFound, ProductRepository
 
 
@@ -32,10 +32,10 @@ def create_product(body: ProductIn, repo: ProductRepository = Depends(get_repo))
 def list_products(
     q: str | None = None,
     category: str | None = None,
-    min_price: float | None = Query(default=None, ge=0),
-    max_price: float | None = Query(default=None, ge=0),
+    min_price: float | None = Query(default=None, ge=0, allow_inf_nan=False),
+    max_price: float | None = Query(default=None, ge=0, allow_inf_nan=False),
     limit: int = Query(default=20, ge=1, le=100),
-    offset: int = Query(default=0, ge=0),
+    offset: int = Query(default=0, ge=0, le=MAX_SQLITE_INT),
     repo: ProductRepository = Depends(get_repo),
 ):
     items, total = repo.list(q, category, min_price, max_price, limit, offset)
@@ -43,24 +43,24 @@ def list_products(
 
 
 @router.get("/{product_id}", response_model=Product)
-def get_product(product_id: int, repo: ProductRepository = Depends(get_repo)):
+def get_product(product_id: int = Path(ge=MIN_SQLITE_INT, le=MAX_SQLITE_INT), repo: ProductRepository = Depends(get_repo)):
     return repo.get(product_id)
 
 
 @router.patch("/{product_id}", response_model=Product)
-def update_product(product_id: int, body: ProductUpdate, repo: ProductRepository = Depends(get_repo)):
+def update_product(body: ProductUpdate, product_id: int = Path(ge=MIN_SQLITE_INT, le=MAX_SQLITE_INT), repo: ProductRepository = Depends(get_repo)):
     # exclude_none: null means "leave alone" (so category cannot be cleared; fine for now)
     return repo.update(product_id, **body.model_dump(exclude_none=True))
 
 
 @router.delete("/{product_id}", status_code=204)
-def delete_product(product_id: int, repo: ProductRepository = Depends(get_repo)):
+def delete_product(product_id: int = Path(ge=MIN_SQLITE_INT, le=MAX_SQLITE_INT), repo: ProductRepository = Depends(get_repo)):
     repo.delete(product_id)
     return Response(status_code=204)
 
 
 @router.post("/{product_id}/stock", response_model=Product)
-def adjust_stock(product_id: int, body: StockAdjustment, repo: ProductRepository = Depends(get_repo)):
+def adjust_stock(body: StockAdjustment, product_id: int = Path(ge=MIN_SQLITE_INT, le=MAX_SQLITE_INT), repo: ProductRepository = Depends(get_repo)):
     return repo.adjust_stock(product_id, body.delta)
 
 

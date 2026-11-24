@@ -38,9 +38,12 @@ def main(argv: list[str] | None = None) -> int:
         args = build_parser().parse_args(argv)
     except SystemExit as exc:
         return int(exc.code or 0)
-    bad: list[str] = []
+    malformed = 0
+    def count_bad(line: str) -> None:
+        nonlocal malformed
+        malformed += 1
     try:
-        records = parse_lines(read_lines(args.logfile), bad)
+        records = parse_lines(read_lines(args.logfile), on_bad=count_bad)
         if args.status:
             records = filter_status(records, args.status)
         if args.since:
@@ -51,5 +54,5 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     spikes = detect_spikes(dict(stats.by_hour), args.spike_factor)
     render = json_report if args.json else text_report
-    print(render(stats, spikes, len(bad)), end="")
+    print(render(stats, spikes, malformed), end="")
     return 0
